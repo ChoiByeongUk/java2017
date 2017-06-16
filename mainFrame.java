@@ -9,6 +9,7 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.Dimension;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -25,66 +26,9 @@ public class mainFrame extends JFrame implements ActionListener{
 	
 	private String[] Dates = {"1", "2"};
 	JComboBox set_Date = new JComboBox(Dates);
-	private static PieDataset createDataset()
-	{
-		DefaultPieDataset dataset = new DefaultPieDataset();
-		dataset.setValue("One", new Double(43.2));
-        dataset.setValue("Two", new Double(10.0));
-        dataset.setValue("Three", new Double(27.5));
-        dataset.setValue("Four", new Double(17.5));
-        dataset.setValue("Five", new Double(11.0));
-        dataset.setValue("Six", new Double(19.4));
-       
-		return dataset;
-	}
-	private void setDataset(PieDataset origin, ChartPanel jPanel)
-	{
-		jPanel.removeAll();
-		jPanel.revalidate();
-		
-		DefaultPieDataset dataset = new DefaultPieDataset();
-		dataset.setValue("Test_One", new Double(43.2));
-        dataset.setValue("Test_Two", new Double(10.0));
-        dataset.setValue("Three", new Double(27.5));
-        dataset.setValue("Four", new Double(17.5));
-        dataset.setValue("Five", new Double(11.0));
-        dataset.setValue("Six", new Double(19.4));
-        
-        origin = dataset;
-	}
-//	public static class Pie extends ApplicationFrame
-//	{
-//		public Pie(String title)
-//		{
-//			super(title);
-//			setContentPane(createPanel());
-//		}
-//		
-//		
-//		
-//		private static JFreeChart createChart(PieDataset dataset)
-//		{
-//			JFreeChart chart = ChartFactory.createPieChart(
-//					"Pie",
-//					dataset,
-//					true,
-//					true,
-//					false
-//					);
-//			
-//			PiePlot plot = (PiePlot) chart.getPlot();
-//			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
-//			plot.setNoDataMessage("No data available");
-//			plot.setCircular(false);
-//			plot.setLabelGap(0.02);
-//			return chart;
-//		}
-//		public static JPanel createPanel()
-//		{
-//			JFreeChart chart =  createChart(createDataset());
-//			return new ChartPanel(chart);
-//		}
-//	}
+	
+	
+
 	public mainFrame()
 	{
 		super("main");
@@ -97,7 +41,14 @@ public class mainFrame extends JFrame implements ActionListener{
 		set_Date.addActionListener(this);
 		add(set_Date, BorderLayout.NORTH);
 		
-		PieDataset dataset = createDataset();
+		
+		DefaultPieDataset dataset = new DefaultPieDataset();
+		dataset.setValue("One", new Double(43.2));
+        dataset.setValue("Two", new Double(10.0));
+        dataset.setValue("Three", new Double(27.5));
+        dataset.setValue("Four", new Double(17.5));
+        dataset.setValue("Five", new Double(11.0));
+        dataset.setValue("Six", new Double(19.4));
 		JFreeChart chartdemo = ChartFactory.createPieChart(
 				"title",
 				dataset,
@@ -106,9 +57,11 @@ public class mainFrame extends JFrame implements ActionListener{
 				false);
 		
 		ChartPanel CP = new ChartPanel(chartdemo);
-		add(CP,BorderLayout.CENTER);
-		setDataset(dataset, CP);
-		CP.repaint();
+		
+		
+		add(CP, BorderLayout.CENTER);
+		
+		
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(2,1));
@@ -130,7 +83,6 @@ public class mainFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e)
 	{
 		String command = e.getActionCommand();
-		
 		
 	}
 	public static void main(String args[])
