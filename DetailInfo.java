@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
@@ -20,13 +21,34 @@ public class DetailInfo extends JFrame implements ActionListener{
 	public static final int W = 500;
 	public static final int H = 600;
 	public static final int START_X =100;
-	public static final int WIDTH = 30;
+	public static final int CHART_W = 30;
 	public static final int MAX_LEN=150;
 	public RecordTable info; // 받아오는정보
 	public ChartFrame test;
 	
 	private class ChartFrame extends JPanel{
-
+		
+		public void paintComponent(Graphics g){
+			super.paintComponent(g);
+			//int[] a=info.search(); // 정보를 받아옴 
+			int[] a = new int[6];
+			int max=0;
+			Random rand=new Random();
+			for(int i=0;i<a.length;i++){
+				a[i]=rand.nextInt(10000);
+				if(a[i]>max)
+					max=a[i];
+			}
+			for(int i=0;i<a.length;i++){
+				double temp =((double)a[i]/max)*MAX_LEN;
+				int length=(int)temp;
+				g.setColor(Color.LIGHT_GRAY);
+				g.fillRect(START_X+(i*50),50+MAX_LEN-length, CHART_W,length);
+				g.setColor(Color.black);
+				g.drawString(Integer.toString(a[i]),START_X+(i*50),50+MAX_LEN-length-20);
+				g.drawString("test"+i,START_X+(i*50) ,220);
+			}
+		}
 	}
 	
 	public static void main(String[] args){
@@ -61,39 +83,39 @@ public class DetailInfo extends JFrame implements ActionListener{
 		data_select.add(search);
 		
 		add(data_select,BorderLayout.NORTH);
-		
+		//테이블 
 		String header[]={"년","월","일","분류","상세내역","지출금액"};
-		String contens[][] = {{"2017","06","03","식비","공대식당","3500"}};
+		String contens[][] = {{"2017","06","03","식비","공대식당","3500"},
+				{"2017","06","03","식비","공대식당","3500"},
+				{"2017","06","03","식비","공대식당","3500"},
+				{"2017","06","03","식비","공대식당","3500"},
+				{"2017","06","03","식비","공대식당","3500"}
+				,{"2017","06","03","식비","공대식당","3500"}
+				,{"2017","06","03","식비","공대식당","3500"},
+				{"2017","06","03","식비","공대식당","3500"}};
 		
 		JTable table = new JTable(contens,header);
 		JScrollPane scrollpane=new JScrollPane(table);
+		JPanel temp =new JPanel();
+		temp.setLayout(new GridLayout(2,1));
+		temp.add(test);//차트 판넬 추가 
+		temp.add(scrollpane);
+		add(temp,BorderLayout.CENTER);
 		
-		add(test,BorderLayout.CENTER);
-		add(scrollpane,BorderLayout.SOUTH);
-	}
-	public void paint(Graphics g){
-		super.paint(g);
-		//int[] a=info.search(); // 정보를 받아옴 
-		int[] a = new int[6];
-		int max=0;
-		Random rand=new Random();
-		for(int i=0;i<a.length;i++){
-			a[i]=rand.nextInt(10000);
-			if(a[i]>max)
-				max=a[i];
-		}
-		for(int i=0;i<a.length;i++){
-			double temp =((double)a[i]/max)*MAX_LEN;
-			int length=(int)temp;
-			System.out.println(length);
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(START_X+(i*50),150+MAX_LEN-length, WIDTH,length);
-			g.setColor(Color.black);
-			g.drawString(Integer.toString(a[i]),START_X+(i*50),150+MAX_LEN-length-20);
-			g.drawString("test"+i,START_X+(i*50) ,320);
-		}
-	}
-
+		//수정 삭제 버튼
+		JPanel button_panel=new JPanel();
+		JButton modify=new JButton("수정");
+		JButton delete=new JButton("삭제");
+		modify.addActionListener(this);
+		delete.addActionListener(this);
+		
+		button_panel.add(modify);
+		button_panel.add(delete);
+		
+		add(button_panel,BorderLayout.SOUTH);
+		
+		
+	}	
 	public void actionPerformed(ActionEvent e) {
 		
 	}
