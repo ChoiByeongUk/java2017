@@ -10,5 +10,11 @@ public interface Categories {
 	int LIFE = 4;
 	int ETC = 5;
 	
+	String sMANAGEMENT = "관리비";
+	String sFOOD = "식비";
+	String sPHONE = "통신비";
+	String sMOVE = "교통비";
+	String sLIFE = "생활용품";
+	String sETC = "기타";
 	int numOfCategories = 6;
 }

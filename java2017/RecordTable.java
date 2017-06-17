@@ -8,8 +8,7 @@ class RecordTable extends ArrayList<Record> implements Categories
 		
 	}
 	
-	public void addRecord(int year, int month, int day, int amount, int category,
-			String secondCategory, String note) {
+	public void addRecord(int year, int month, int day, int amount, int category, String note) {
 		Record r = new Record();
 
 		Calendar d = new GregorianCalendar(year, month, day, 0, 0, 0);
@@ -18,7 +17,6 @@ class RecordTable extends ArrayList<Record> implements Categories
 		r.setNote(note);
 		r.setAmount(amount);
 		r.setCategory(category);
-		r.setSecondCategory(secondCategory);
 
 		this.add(r);
 	}
@@ -31,6 +29,26 @@ class RecordTable extends ArrayList<Record> implements Categories
 		begin.add(Calendar.SECOND, -1);
 		Calendar end = new GregorianCalendar(endYear, endMonth, endDay, 0, 0, 0);
 		end.add(Calendar.DATE, 1);
+		
+		for(Record it : this)
+		{
+			if(it.getDate().after(begin) && it.getDate().before(end))
+			{
+				ret.add(it);
+			}
+		}
+		
+		return ret;
+	}
+	
+	public RecordTable listByMonth(int beginYear, int beginMonth, int endYear, int endMonth)
+	{
+		RecordTable ret = new RecordTable();
+		
+		Calendar begin = new GregorianCalendar(beginYear, beginMonth, 1, 0, 0, 0);
+		begin.add(Calendar.SECOND, -1);
+		Calendar end = new GregorianCalendar(endYear, endMonth, 1, 0, 0, 0);
+		end.add(Calendar.MONTH, 1);
 		
 		for(Record it : this)
 		{
@@ -73,10 +91,10 @@ class RecordTable extends ArrayList<Record> implements Categories
 	public static void main(String args[])
 	{
 		RecordTable RT = new RecordTable();
-		RT.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE", "");
-		RT.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS", "");
-		RT.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER", "");
-		RT.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI", "");
+		RT.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE");
+		RT.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS");
+		RT.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER");
+		RT.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI");
 	
 		RecordTable list = RT.listByDate(2016, 3, 1, 2017, 6, 11);
 		for(Record it : list)

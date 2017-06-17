@@ -70,7 +70,7 @@ public class mainFrame extends JFrame implements ActionListener{
 		set_Date.addItem("2017/03");
 		set_Date.setSelectedItem(0);
 		Top.add(set_Date);
-		set_Date.addItemListener(new DateSelectListener(dataset));
+		set_Date.addItemListener(new DateSelectListener(dataset, data));
 		//end setdate panel
 		
 		//pie chart
@@ -105,6 +105,14 @@ public class mainFrame extends JFrame implements ActionListener{
 		add(CP, BorderLayout.CENTER);
 		add(buttonPanel,BorderLayout.SOUTH);
 		add(Top, BorderLayout.NORTH);
+		
+		
+		/**/
+		data.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE");
+		data.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS");
+		data.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER");
+		data.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI");
+		data.addRecord(2017, 6, 13, 1632, Categories.PHONE, "SUSHI");
 		
 	}
 	public void actionPerformed(ActionEvent e)

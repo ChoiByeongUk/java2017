@@ -51,7 +51,7 @@ public class addFrame extends JFrame implements ActionListener, ItemListener{
 		yes.addActionListener(this);
 		
 		JButton no = new JButton("Cancel");
-		
+		no.addActionListener(this);
 		
 		confirm.add(yes); confirm.add(no);
 		add(select);
@@ -70,13 +70,17 @@ public class addFrame extends JFrame implements ActionListener, ItemListener{
 				M = Integer.parseInt(Month.getSelectedItem().toString());
 				int day = Integer.parseInt(Day.getSelectedItem().toString());
 				System.out.println(Categories.getSelectedIndex());
-				
-				data.addRecord(Year, M, day, Integer.parseInt(P_Text.getText()),Categories.getSelectedIndex(), "", "");
-				
+				data.addRecord(Year, M, day, Integer.parseInt(P_Text.getText()),Categories.getSelectedIndex(), "");
 			}
 				
 			
 			
+		}
+		if(command.equals("Cancel"))
+		{
+			Y_Text.setText("");
+			P_Text.setText("");
+			setVisible(false);
 		}
 	}
 	
