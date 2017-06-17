@@ -1,3 +1,4 @@
+package java2017;
 import java.util.*;
 
 class RecordTable extends ArrayList<Record> implements Categories

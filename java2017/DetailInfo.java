@@ -115,7 +115,12 @@ public class DetailInfo extends JFrame implements ActionListener{
 		add(button_panel,BorderLayout.SOUTH);
 		
 		
-	}	
+	}
+	public DetailInfo(RecordTable in){
+		this();
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		info = in;
+	}
 	public void actionPerformed(ActionEvent e) {
 		
 	}
