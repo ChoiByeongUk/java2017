@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -19,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 
 public class DetailInfo extends JFrame implements ActionListener{
 	public static final int W = 500;
@@ -41,6 +44,7 @@ public class DetailInfo extends JFrame implements ActionListener{
 	private JTextField year2;
 	private JTextField month2;
 	private JTextField day2;
+	private String revision_text;
 	
 	
 	private class ChartFrame extends JPanel{
@@ -64,7 +68,73 @@ public class DetailInfo extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+	private class DisposeExit extends WindowAdapter{
+		public void windowClosing(WindowEvent e){
+			dispose();
+		}
+	}
+	public class RevisionFrame extends JFrame implements ActionListener{
+		public static final int W=300;
+		public static final int H=130;
+		
+		private JTextField input;
+		
+		
+		public RevisionFrame(){
+			super("Revision Input");
+			setSize(W,H);
+			setLayout(new BorderLayout());
+			setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			addWindowListener(new DisposeExit(){
+				public void windowClosing(WindowEvent e){
+					DetailInfo.this.setEnabled(true);
+					dispose();
+				}
+			});
+			
+			JPanel text_panel=new JPanel();
+			text_panel.setLayout(new FlowLayout());
+			
+			
+			JLabel label= new JLabel("수정값 입력 : ");
+			input=new JTextField(10);
+			
+			text_panel.add(label);
+			text_panel.add(input);
+			
+			add(text_panel,BorderLayout.CENTER);
+			
+			JPanel button_panel=new JPanel();
+			
+			JButton yes=new JButton("확인");
+			JButton no=new JButton("취소");
+			yes.addActionListener(this);
+			no.addActionListener(this);
+			button_panel.add(yes);
+			button_panel.add(no);
+			
+			add(button_panel,BorderLayout.SOUTH);
+			
+		}
+
+
+		public void actionPerformed(ActionEvent e) {
+			String commant = e.getActionCommand();
+			if(commant.equals("확인")){
+				revision_text=input.getText();
+				//탐색작업추가
+				DetailInfo.this.setEnabled(true);
+				dispose();
+			}
+			else if(commant.equals("취소")){
+				DetailInfo.this.setEnabled(true);
+				dispose();
+			}
+			
+		}
+		
+
+	}
 	public static void main(String[] args){
 		//DetailInfo test = new DetailInfo();
 		//test.setVisible(true);
@@ -112,8 +182,15 @@ public class DetailInfo extends JFrame implements ActionListener{
 			contens[i][4]=info.get(i).getNote();
 			contens[i][5]=Integer.toString(info.get(i).getAmount());
 		}
-		model=new DefaultTableModel(contens,header);
+		model=new DefaultTableModel(contens,header){
+			public boolean isCellEditable(int row,int column){
+				return false;
+			}
+			
+		};
+
 		table = new JTable(model);
+		
 		scrollpane=new JScrollPane(table);
 		JPanel temp =new JPanel();
 		temp.setLayout(new GridLayout(2,1));
@@ -155,17 +232,17 @@ public class DetailInfo extends JFrame implements ActionListener{
 				info.remove(target);
 				ret.remove(target);
 				//레코드를 받아와서 info에서 삭제 (ret에서 받아옴)
-				for(Record it : info)
+				/*for(Record it : info)
 				{
 					System.out.println(it);
-				}
+				}*/
 				//삭제 후 리페인트 요망
 				chart.repaint();
 				model.removeRow(table.getSelectedRow());
 			}
 		}
 		else if(comand.equals("조회")){
-			//예외처리 나중에 반드시 할 것
+			//예외처리 나중에 반드시 할 것 콤보박스로 교체도 할것
 			int start_year=Integer.parseInt(year1.getText().trim());
 			int start_month=Integer.parseInt(month1.getText().trim());
 			int start_day=Integer.parseInt(day1.getText().trim());
@@ -190,7 +267,14 @@ public class DetailInfo extends JFrame implements ActionListener{
 			
 			
 			chart.repaint();
+		}
+		else if(comand.equals("수정")){
+			//프렝미 하나 더만들어서 수정할 것 
 			
+			RevisionFrame revision=new RevisionFrame();
+			revision.setVisible(true);
+			revision.setAlwaysOnTop(true);
+			this.setEnabled(false);
 			
 		}
 		
