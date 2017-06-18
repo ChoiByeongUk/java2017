@@ -144,6 +144,65 @@ public class mainFrame extends JFrame implements ActionListener{
 			DateSelectListener new_Listener = new DateSelectListener(dataset, data);
 			set_Date.addItemListener(new_Listener);
 			origin = new_Listener;
+			String item = null;
+			
+			
+			set_Date.removeAllItems();
+			int min_year = data.least_year();
+			int max_year = data.most_year();
+			for(int i = min_year; i<=max_year;i++)
+			{
+				for(int j = 1; j<=12; j++)
+				{
+					int year, month;
+					RecordTable ret = data.listByMonth(i, j, i, j);
+					//System.out.print(i + "/" + j +":");
+					//System.out.println(ret.size());
+					if(ret.size() > 0)
+					{
+						year = i; month = j;
+						String date_item = (String)(i + "/" + j);
+						set_Date.addItem(date_item);
+					}
+				}
+			}
+			try
+			{
+				item = set_Date.getSelectedItem().toString();
+				
+			}
+			catch(NullPointerException exception)
+			{
+				
+			}
+			if(item != null)
+			{
+				StringTokenizer token = new StringTokenizer(item, "/ ");
+				
+				int year, month;
+				year = Integer.parseInt(token.nextToken());
+				month = Integer.parseInt(token.nextToken());
+				RecordTable ret = data.listByMonth(year, month ,year, month);/**/
+				int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
+				double sum = 0;
+				for(int i =0; i<categories.length; i++)
+					sum += categories[i];
+				dataset.setValue("Management", new Double((categories[0] / sum )* 100));
+				dataset.setValue("Food", new Double((categories[1] / sum )* 100));
+				dataset.setValue("Phone", new Double((categories[2] / sum )* 100));
+				dataset.setValue("Move", new Double((categories[3] / sum )* 100));
+				dataset.setValue("Life", new Double((categories[4] / sum )* 100));
+			    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
+			}
+			else if(item == null)
+			{
+				dataset.setValue("Management", 0);
+				dataset.setValue("Food", 0);
+				dataset.setValue("Phone", 0);
+				dataset.setValue("Move", 0);
+				dataset.setValue("Life", 0);
+			    dataset.setValue("etc.", 0);
+			}
 		}
 		else if(command.equals("refresh"))
 		{
@@ -196,6 +255,15 @@ public class mainFrame extends JFrame implements ActionListener{
 				dataset.setValue("Move", new Double((categories[3] / sum )* 100));
 				dataset.setValue("Life", new Double((categories[4] / sum )* 100));
 			    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
+			}
+			else if(item == null)
+			{
+				dataset.setValue("Management", 0);
+				dataset.setValue("Food", 0);
+				dataset.setValue("Phone", 0);
+				dataset.setValue("Move", 0);
+				dataset.setValue("Life", 0);
+			    dataset.setValue("etc.", 0);
 			}
 //			for(int i =0; i<set_Date.getItemCount(); i++)
 //			{
