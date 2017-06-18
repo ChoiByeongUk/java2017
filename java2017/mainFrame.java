@@ -42,7 +42,8 @@ public class mainFrame extends JFrame implements ActionListener{
 	
 //	String[] categories = {"Management", "Food", "Phone", "Move", "Life", "etc."};
 	String[] categories = {"관리비", "식비", "통신비", "교통비", "생활용품", "기타"};
-	JComboBox set_Date = new JComboBox(); 
+	JComboBox set_Date = new JComboBox();
+	DateSelectListener origin;
 	public mainFrame()
 	{
 		
@@ -50,17 +51,12 @@ public class mainFrame extends JFrame implements ActionListener{
 		setSize(MAIN_WIDTH, MAIN_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		//Top buttons
-		JPanel Top = new JPanel();		
-		JPanel Top_Button = new JPanel();
-		Top_Button.setLayout(new GridLayout(2,1));
-		Top.setLayout(new FlowLayout());
 		
 		JMenuItem openMenu = new JMenuItem("OPEN"), saveMenu = new JMenuItem("SAVE");
 		JMenu fileMenu = new JMenu("FILE");
 		JMenuBar MB = new JMenuBar();
 		
-		openMenu.addActionListener( (ActionEvent e) -> data = TableFileManager.open());
+		openMenu.addActionListener(this);
 		saveMenu.addActionListener( (ActionEvent e) -> TableFileManager.write(data));
 		
 		fileMenu.add(openMenu);
@@ -69,32 +65,35 @@ public class mainFrame extends JFrame implements ActionListener{
 		
 		setJMenuBar(MB);
 		
+		//Top buttons
+		JPanel Top = new JPanel();		
+		JPanel Top_Button = new JPanel();
+		Top_Button.setLayout(new GridLayout(2,1));
+		Top.setLayout(new FlowLayout());
 		
-		JButton add_Date = new JButton("new");
-		JButton del_Date = new JButton("delete");
-		add_Date.addActionListener(this);
-		del_Date.addActionListener(this);
+		
+		
+		
+		
 		JButton refresh = new JButton("refresh");
 		refresh.addActionListener(this);
-		Top_Button.add(add_Date);
-		Top_Button.add(del_Date);
 		Top.add(Top_Button);
 		
 		//setdate panel
 		set_Date.setSelectedItem(0);
 		Top.add(set_Date);
-		set_Date.addItemListener(new DateSelectListener(dataset, data));
+		origin = new DateSelectListener(dataset, data);
+		set_Date.addItemListener(origin);
 		Top.add(refresh);
 		//end setdate panel
 		
 		//pie chart
 		JFreeChart chartdemo = ChartFactory.createPieChart(
-				"title",
+				"Graph",
 				dataset,
 				true,
 				true,
 				false);
-		chartdemo.setTitle("");
 		ChartPanel CP = new ChartPanel(chartdemo);
 		//end pie chart
 		
@@ -138,22 +137,42 @@ public class mainFrame extends JFrame implements ActionListener{
 			DetailInfo detail = new DetailInfo(data);
 			detail.setVisible(true);
 		}
-		else if(command.equals("new"))
+		else if(command.equals("OPEN"))
 		{
-			DateAddFrame new_window = new DateAddFrame(set_Date);
-			new_window.setVisible(true);
-		}
-		else if(command.equals("delete"))
-		{
-			ConfirmFrame new_window = new ConfirmFrame(set_Date);
-			new_window.setVisible(true);
+			data = TableFileManager.open();
+			set_Date.removeItemListener(origin);
+			DateSelectListener new_Listener = new DateSelectListener(dataset, data);
+			set_Date.addItemListener(new_Listener);
+			origin = new_Listener;
 		}
 		else if(command.equals("refresh"))
 		{
 			String item = null;
+			
+			
+			set_Date.removeAllItems();
+			int min_year = data.least_year();
+			int max_year = data.most_year();
+			for(int i = min_year; i<=max_year;i++)
+			{
+				for(int j = 1; j<=12; j++)
+				{
+					int year, month;
+					RecordTable ret = data.listByMonth(i, j, i, j);
+					//System.out.print(i + "/" + j +":");
+					//System.out.println(ret.size());
+					if(ret.size() > 0)
+					{
+						year = i; month = j;
+						String date_item = (String)(i + "/" + j);
+						set_Date.addItem(date_item);
+					}
+				}
+			}
 			try
 			{
 				item = set_Date.getSelectedItem().toString();
+				
 			}
 			catch(NullPointerException exception)
 			{
@@ -166,8 +185,7 @@ public class mainFrame extends JFrame implements ActionListener{
 				int year, month;
 				year = Integer.parseInt(token.nextToken());
 				month = Integer.parseInt(token.nextToken());
-				
-				RecordTable ret = data.listByMonth(year, month ,year, month+1);/**/
+				RecordTable ret = data.listByMonth(year, month ,year, month);/**/
 				int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
 				double sum = 0;
 				for(int i =0; i<categories.length; i++)
@@ -179,9 +197,11 @@ public class mainFrame extends JFrame implements ActionListener{
 				dataset.setValue("Life", new Double((categories[4] / sum )* 100));
 			    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
 			}
-			
-			
-			
+//			for(int i =0; i<set_Date.getItemCount(); i++)
+//			{
+//				
+//			}
+
 			
 			
 		}

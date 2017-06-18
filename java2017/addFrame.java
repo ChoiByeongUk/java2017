@@ -96,7 +96,6 @@ public class addFrame extends JFrame implements ActionListener, ItemListener{
 				Year = Integer.parseInt(Y_Text.getText());
 				M = Integer.parseInt(Month.getSelectedItem().toString());
 				int day = Integer.parseInt(Day.getSelectedItem().toString());
-				System.out.println(Categories.getSelectedIndex());
 				data.addRecord(Year, M, day, Integer.parseInt(P_Text.getText()),Categories.getSelectedIndex(), N_Text.getText());
 				JFrame window = new JFrame("OK.");
 				window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -128,7 +127,17 @@ public class addFrame extends JFrame implements ActionListener, ItemListener{
 	public void itemStateChanged(ItemEvent event) {
 		if(event.getStateChange() == ItemEvent.SELECTED)
 		{
-			if(Y_Text.getText() != "")
+			
+			if(Y_Text.getText().equals(""))
+			{
+				JFrame error_window = new JFrame("error!");
+				error_window.setDefaultCloseOperation(HIDE_ON_CLOSE);
+				JLabel message = new JLabel("년도를 먼저 입력해주세요.");
+				error_window.add(message);
+				error_window.setSize(400, 100);
+				error_window.setVisible(true);
+			}
+			else
 			{
 				Day.removeAllItems();
 				Calendar d = new GregorianCalendar(Integer.parseInt(Y_Text.getText()), Month.getSelectedIndex(), 1);

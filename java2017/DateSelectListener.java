@@ -37,9 +37,10 @@ public class DateSelectListener implements ItemListener{
 			int year, month;
 			year = Integer.parseInt(token.nextToken());
 			month = Integer.parseInt(token.nextToken());
-			
-			RecordTable ret = table.listByMonth(year, month ,year, month+1);/**/
-			int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
+//			System.out.println(year);
+//			System.out.println(month);
+			RecordTable ret = table.listByMonth(year, month ,year, month);/**/
+			int categories[] = ret.sumByCategories(); 
 			double sum = 0;
 			for(int i =0; i<categories.length; i++)
 				sum += categories[i];
