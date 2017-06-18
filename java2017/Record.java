@@ -1,6 +1,4 @@
-
 package java2017;
-import java.text.SimpleDateFormat;
 
 import java.util.*;
 
@@ -22,12 +20,12 @@ public class Record implements Categories {
 	
 	public static int categoryId(String s)
 	{
-		if(s == Categories.sMANAGEMENT) return Categories.MANGEMENT;
-		if(s == Categories.sFOOD) return Categories.FOOD;
-		if(s == Categories.sLIFE) return Categories.LIFE;
-		if(s == Categories.sETC) return Categories.ETC;
-		if(s == Categories.sPHONE) return Categories.PHONE;
-		if(s == Categories.sMOVE) return Categories.MOVE;
+		if(s.equals(Categories.sMANAGEMENT)) return Categories.MANGEMENT;
+		if(s.equals(Categories.sFOOD)) return Categories.FOOD;
+		if(s.equals(Categories.sLIFE)) return Categories.LIFE;
+		if(s.equals(Categories.sETC)) return Categories.ETC;
+		if(s.equals(Categories.sPHONE)) return Categories.PHONE;
+		if(s.equals(Categories.sMOVE)) return Categories.MOVE;
 
 		return -1;
 	}

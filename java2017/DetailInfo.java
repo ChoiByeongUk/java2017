@@ -2,6 +2,7 @@ package java2017;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -14,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,12 +40,12 @@ public class DetailInfo extends JFrame implements ActionListener{
 	private String[] categories={"관리비","식비","통신비","교통비","생활용품","기타"};
 	private String header[]={"년","월","일","분류","상세내역","지출금액"};
 	private JScrollPane scrollpane;
-	private JTextField year1;
-	private JTextField month1;
-	private JTextField day1;
-	private JTextField year2;
-	private JTextField month2;
-	private JTextField day2;
+	private JComboBox year1;
+	private JComboBox month1;
+	private JComboBox day1;
+	private JComboBox year2;
+	private JComboBox month2;
+	private JComboBox day2;
 	private String revision_text;
 	
 	
@@ -121,8 +123,40 @@ public class DetailInfo extends JFrame implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			String commant = e.getActionCommand();
 			if(commant.equals("확인")){
+				if(table.getSelectedRow()==-1)
+				{
+					DetailInfo.this.setEnabled(true);
+					dispose();
+					return;
+				}
+				Record target = new Record();
 				revision_text=input.getText();
-				//탐색작업추가
+				target=ret.get(table.getSelectedRow());
+				switch(table.getSelectedColumn()){
+				case 0 : target.getDate().set(Calendar.YEAR,Integer.parseInt(revision_text.trim()));
+						year1.removeAllItems();
+						for(int i=info.least_year();i<info.most_year()+1;i++)
+								year1.addItem(Integer.toString(i));
+						year2.removeAllItems();
+						for(int i=info.least_year();i<info.most_year()+1;i++)
+								year2.addItem(Integer.toString(i));
+						break;
+				case 1 : target.getDate().set(Calendar.MONTH,Integer.parseInt(revision_text.trim()));
+						break;
+				case 2 : target.getDate().set(Calendar.DAY_OF_MONTH,Integer.parseInt(revision_text.trim()));
+						break;
+				case 3 : int categori=Record.categoryId(revision_text);
+						if(categori==-1) break;
+						target.setCategory(categori);
+						break;
+				case 4 : target.setNote(revision_text.trim());
+						break;
+				case 5 : target.setAmount(Integer.parseInt(revision_text.trim()));
+						break;
+				}
+				table.setValueAt(revision_text, table.getSelectedRow(),table.getSelectedColumn());
+				chart.repaint();
+				
 				DetailInfo.this.setEnabled(true);
 				dispose();
 			}
@@ -131,14 +165,10 @@ public class DetailInfo extends JFrame implements ActionListener{
 				dispose();
 			}
 			
+			
 		}
 		
 
-	}
-	public static void main(String[] args){
-		//DetailInfo test = new DetailInfo();
-		//test.setVisible(true);
-		//test.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	public DetailInfo(RecordTable record){
 		super("Detail Infomation");
@@ -150,13 +180,33 @@ public class DetailInfo extends JFrame implements ActionListener{
 		data_select.setLayout(new FlowLayout());
 		chart=new ChartFrame();
 		//날자선택  판넬
-		year1 =new JTextField("2015",6);
-		month1 =new JTextField("11",4);
-		day1 =new JTextField("18",4);
+		year1 =new JComboBox();
+		for(int i=info.least_year();i<info.most_year()+1;i++)
+			year1.addItem(Integer.toString(i));
+		year1.setBackground(Color.WHITE);
+
+		month1 =new JComboBox();
+		for(int i=1;i<13;i++)
+			month1.addItem(Integer.toString(i));
+		month1.setBackground(Color.WHITE);
+		day1 =new JComboBox();
+		for(int i=1;i<32;i++)
+			day1.addItem(Integer.toString(i));
+		day1.setBackground(Color.WHITE);
 		JLabel to =new JLabel("~");
-		year2 =new JTextField("2017",6);
-		month2 =new JTextField("6",4);
-		day2 =new JTextField("11",4);
+		year2 =new JComboBox();
+		for(int i=info.least_year();i<info.most_year()+1;i++)
+			year2.addItem(Integer.toString(i));
+		year2.setBackground(Color.WHITE);
+
+		month2 =new JComboBox();
+		for(int i=1;i<13;i++)
+			month2.addItem(Integer.toString(i));
+		month2.setBackground(Color.WHITE);
+		day2 =new JComboBox();
+		for(int i=1;i<32;i++)
+			day2.addItem(Integer.toString(i));
+		day2.setBackground(Color.WHITE);
 		JButton search=new JButton("조회");
 		search.addActionListener(this);
 		
@@ -211,8 +261,7 @@ public class DetailInfo extends JFrame implements ActionListener{
 		add(button_panel,BorderLayout.SOUTH);
 		
 		
-	}
-	
+	}	
 	public void actionPerformed(ActionEvent e) {
 		String comand =e.getActionCommand();
 		if(comand.equals("삭제")){
@@ -220,19 +269,9 @@ public class DetailInfo extends JFrame implements ActionListener{
 				return;
 			else{
 				Record target = new Record();
-				
-				/*int year =Integer.parseInt((String)table.getValueAt(table.getSelectedRow(),0));
-				int month = Integer.parseInt((String)table.getValueAt(table.getSelectedRow(),1));
-				int day =Integer.parseInt((String)table.getValueAt(table.getSelectedRow(),2));
-				target.setDate(new GregorianCalendar(year,month,day,0,0,0));
-				target.setCategory(Record.categoryId((String)table.getValueAt(table.getSelectedRow(), 3)));
-				target.setNote((String)table.getValueAt(table.getSelectedRow(),4));
-				target.setAmount(Integer.parseInt((String)table.getValueAt(table.getSelectedRow(),5)));
-				*/
 				target=ret.get(table.getSelectedRow());
 				info.remove(target);
 				ret.remove(target);
-				//레코드를 받아와서 info에서 삭제 (ret에서 받아옴)
 				/*for(Record it : info)
 				{
 					System.out.println(it);
@@ -244,12 +283,12 @@ public class DetailInfo extends JFrame implements ActionListener{
 		}
 		else if(comand.equals("조회")){
 			//예외처리 나중에 반드시 할 것 콤보박스로 교체도 할것
-			int start_year=Integer.parseInt(year1.getText().trim());
-			int start_month=Integer.parseInt(month1.getText().trim());
-			int start_day=Integer.parseInt(day1.getText().trim());
-			int end_year=Integer.parseInt(year2.getText().trim());
-			int end_month=Integer.parseInt(month2.getText().trim());
-			int end_day=Integer.parseInt(day2.getText().trim());
+			int start_year=Integer.parseInt(year1.getSelectedItem().toString().trim());
+			int start_month=Integer.parseInt(month1.getSelectedItem().toString().trim());
+			int start_day=Integer.parseInt(day1.getSelectedItem().toString().trim());
+			int end_year=Integer.parseInt(year2.getSelectedItem().toString().trim());
+			int end_month=Integer.parseInt(month2.getSelectedItem().toString().trim());
+			int end_day=Integer.parseInt(day2.getSelectedItem().toString().trim());
 		
 			model.setRowCount(0);
 			ret=info.listByDate(start_year,start_month,start_day
@@ -271,7 +310,6 @@ public class DetailInfo extends JFrame implements ActionListener{
 		}
 		else if(comand.equals("수정")){
 			//프렝미 하나 더만들어서 수정할 것 
-			
 			RevisionFrame revision=new RevisionFrame();
 			revision.setVisible(true);
 			revision.setAlwaysOnTop(true);

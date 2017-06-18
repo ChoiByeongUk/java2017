@@ -86,7 +86,30 @@ class RecordTable extends ArrayList<Record> implements Categories
 		
 		return sum;
 	}
-	
+	public int least_year(){
+		int min=9999;
+		int temp;
+		for(Record it : this)
+		{
+			temp=it.getDate().get(Calendar.YEAR);
+			if(temp<min){
+				min=temp;
+			}
+		}
+		return min;
+	}
+	public int most_year(){
+		int max=0;
+		int temp;
+		for(Record it : this)
+		{
+			temp=it.getDate().get(Calendar.YEAR);
+			if(temp>max){
+				max=temp;
+			}
+		}
+		return max;
+	}
 	
 	public static void main(String args[])
 	{
