@@ -158,10 +158,10 @@ public class mainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
-//	public static void main(String args[])
-//	{
-//		mainFrame window = new mainFrame();
-//		window.setVisible(true);
+	public static void main(String args[])
+	{
+		mainFrame window = new mainFrame();
+		window.setVisible(true);
 //		
-//	}
+	}
 }
