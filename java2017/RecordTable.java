@@ -131,5 +131,14 @@ class RecordTable extends ArrayList<Record> implements Categories
 			System.out.println(it);
 		}
 		
+		RT.remove(1);
+		
+		TableFileManager.write(RT);
+		
+		RT = TableFileManager.open();
+		for(Record it : list)
+		{
+			System.out.println(it.getAmount());
+		}		
 	}
 }

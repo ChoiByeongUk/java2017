@@ -1,8 +1,9 @@
 package java2017;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Record implements Categories {
+public class Record implements Categories, Comparable<Record>, Serializable {
 	private Calendar date;
 	private int amount;
 	private String note;
@@ -62,5 +63,13 @@ public class Record implements Categories {
 		ret += Integer.toString(amount) + "won";
 		
 		return ret;
+	}
+	
+	@Override
+	public int compareTo(Record o) {
+		// TODO Auto-generated method stub
+		if(this.getDate().before(o.getDate())) return 1;
+		else if(o.getDate().before(this.getDate())) return -1;
+		else return 0;
 	}
 }
