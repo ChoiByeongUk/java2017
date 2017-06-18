@@ -10,11 +10,11 @@ public interface Categories {
 	int LIFE = 4;
 	int ETC = 5;
 	
-	String sMANAGEMENT = "ê´€ë¦¬ë¹„";
-	String sFOOD = "ì‹ë¹„";
-	String sPHONE = "í†µì‹ ë¹„";
-	String sMOVE = "êµí†µë¹„";
-	String sLIFE = "ìƒí™œìš©í’ˆ";
-	String sETC = "ê¸°íƒ€";
+	String sMANAGEMENT = "°ü¸®ºñ";
+	String sFOOD = "½Äºñ";
+	String sPHONE = "Åë½Åºñ";
+	String sMOVE = "±³Åëºñ";
+	String sLIFE = "»ıÈ°¿ëÇ°";
+	String sETC = "±âÅ¸";
 	int numOfCategories = 6;
 }

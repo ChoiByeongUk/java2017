@@ -42,10 +42,8 @@ public class DateSelectListener implements ItemListener{
 			int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
 			double sum = 0;
 			for(int i =0; i<categories.length; i++)
-			{
 				sum += categories[i];
-				System.out.println(categories[i]);
-			}
+				
 				
 			
 			System.out.println(ret.size());
@@ -55,7 +53,7 @@ public class DateSelectListener implements ItemListener{
 		    dataset.setValue("Move", new Double((categories[3] / sum )* 100));
 		    dataset.setValue("Life", new Double((categories[4] / sum )* 100));
 		    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
-				
+		
 			
 			System.out.println(event.getItem());
 		}

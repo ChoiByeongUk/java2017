@@ -31,46 +31,43 @@ import org.jfree.ui.RefineryUtilities;
 
 public class mainFrame extends JFrame implements ActionListener{
 	private static int MAIN_WIDTH = 500;
-	private static int MAIN_HEIGHT = 1000;
+	private static int MAIN_HEIGHT = 700;
 	DefaultPieDataset dataset = new DefaultPieDataset();
 	
 	private RecordTable data = new RecordTable();
 	
-	private String[] Dates = {"2017/06", "2017/07"};
-	String[] categories = {"Management", "Food", "Phone", "Move", "Life", "etc."};
 	
-	
-	private void setDataset(DefaultPieDataset dataset, RecordTable table)
-	{
-		
-	}
+//	String[] categories = {"Management", "Food", "Phone", "Move", "Life", "etc."};
+	String[] categories = {"관리비", "식비", "통신비", "교통비", "생활용품", "기타"};
+	JComboBox set_Date = new JComboBox(); 
 	public mainFrame()
 	{
+		
 		super("main");
 		setSize(MAIN_WIDTH, MAIN_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		//Top buttons, combobox
-		JPanel Top = new JPanel();
+		//Top buttons
+		JPanel Top = new JPanel();		
 		JPanel Top_Button = new JPanel();
 		Top_Button.setLayout(new GridLayout(2,1));
 		Top.setLayout(new FlowLayout());
 		
-		JButton add_Date = new JButton("+");
-		JButton del_Date = new JButton("-");
+		JButton add_Date = new JButton("new");
+		JButton del_Date = new JButton("delete");
 		add_Date.addActionListener(this);
 		del_Date.addActionListener(this);
-		
+		JButton refresh = new JButton("refresh");
+		refresh.addActionListener(this);
 		Top_Button.add(add_Date);
 		Top_Button.add(del_Date);
 		Top.add(Top_Button);
 		
 		//setdate panel
-		JComboBox set_Date = new JComboBox(Dates); // 날짜 선택 콤보박스
-		set_Date.addItem("2017/03");
 		set_Date.setSelectedItem(0);
 		Top.add(set_Date);
 		set_Date.addItemListener(new DateSelectListener(dataset, data));
+		Top.add(refresh);
 		//end setdate panel
 		
 		//pie chart
@@ -108,11 +105,7 @@ public class mainFrame extends JFrame implements ActionListener{
 		
 		
 		/**/
-		data.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE");
-		data.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS");
-		data.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER");
-		data.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI");
-		data.addRecord(2017, 6, 13, 1632, Categories.PHONE, "SUSHI");
+		
 		
 	}
 	public void actionPerformed(ActionEvent e)
@@ -127,6 +120,41 @@ public class mainFrame extends JFrame implements ActionListener{
 		{
 			DetailInfo detail = new DetailInfo(data);
 			detail.setVisible(true);
+		}
+		else if(command.equals("new"))
+		{
+			DateAddFrame new_window = new DateAddFrame(set_Date);
+			new_window.setVisible(true);
+		}
+		else if(command.equals("delete"))
+		{
+			ConfirmFrame new_window = new ConfirmFrame(set_Date);
+			new_window.setVisible(true);
+		}
+		else if(command.equals("refresh"))
+		{
+			String item = set_Date.getSelectedItem().toString();
+			StringTokenizer token = new StringTokenizer(item, "/ ");
+			
+			int year, month;
+			year = Integer.parseInt(token.nextToken());
+			month = Integer.parseInt(token.nextToken());
+			
+			RecordTable ret = data.listByMonth(year, month ,year, month+1);/**/
+			int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
+			double sum = 0;
+			for(int i =0; i<categories.length; i++)
+				sum += categories[i];
+			System.out.println(ret.size());
+			dataset.setValue("Management", new Double((categories[0] / sum )* 100));
+		    dataset.setValue("Food", new Double((categories[1] / sum )* 100));
+		    dataset.setValue("Phone", new Double((categories[2] / sum )* 100));
+		    dataset.setValue("Move", new Double((categories[3] / sum )* 100));
+		    dataset.setValue("Life", new Double((categories[4] / sum )* 100));
+		    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
+		   
+			
+			
 		}
 	}
 	
