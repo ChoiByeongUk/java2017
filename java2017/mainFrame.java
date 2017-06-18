@@ -4,6 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JMenuBar;
 
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
@@ -52,6 +55,20 @@ public class mainFrame extends JFrame implements ActionListener{
 		JPanel Top_Button = new JPanel();
 		Top_Button.setLayout(new GridLayout(2,1));
 		Top.setLayout(new FlowLayout());
+		
+		JMenuItem openMenu = new JMenuItem("OPEN"), saveMenu = new JMenuItem("SAVE");
+		JMenu fileMenu = new JMenu("FILE");
+		JMenuBar MB = new JMenuBar();
+		
+		openMenu.addActionListener( (ActionEvent e) -> data = TableFileManager.open());
+		saveMenu.addActionListener( (ActionEvent e) -> TableFileManager.write(data));
+		
+		fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
+		MB.add(fileMenu);
+		
+		setJMenuBar(MB);
+		
 		
 		JButton add_Date = new JButton("new");
 		JButton del_Date = new JButton("delete");
@@ -133,35 +150,47 @@ public class mainFrame extends JFrame implements ActionListener{
 		}
 		else if(command.equals("refresh"))
 		{
-			String item = set_Date.getSelectedItem().toString();
-			StringTokenizer token = new StringTokenizer(item, "/ ");
+			String item = null;
+			try
+			{
+				item = set_Date.getSelectedItem().toString();
+			}
+			catch(NullPointerException exception)
+			{
+				
+			}
+			if(item != null)
+			{
+				StringTokenizer token = new StringTokenizer(item, "/ ");
+				
+				int year, month;
+				year = Integer.parseInt(token.nextToken());
+				month = Integer.parseInt(token.nextToken());
+				
+				RecordTable ret = data.listByMonth(year, month ,year, month+1);/**/
+				int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
+				double sum = 0;
+				for(int i =0; i<categories.length; i++)
+					sum += categories[i];
+				dataset.setValue("Management", new Double((categories[0] / sum )* 100));
+				dataset.setValue("Food", new Double((categories[1] / sum )* 100));
+				dataset.setValue("Phone", new Double((categories[2] / sum )* 100));
+				dataset.setValue("Move", new Double((categories[3] / sum )* 100));
+				dataset.setValue("Life", new Double((categories[4] / sum )* 100));
+			    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
+			}
 			
-			int year, month;
-			year = Integer.parseInt(token.nextToken());
-			month = Integer.parseInt(token.nextToken());
 			
-			RecordTable ret = data.listByMonth(year, month ,year, month+1);/**/
-			int categories[] = ret.sumByCategories(); // 수정 필요함. 날짜 별 카테고리 구분 필ㄴ요.
-			double sum = 0;
-			for(int i =0; i<categories.length; i++)
-				sum += categories[i];
-			System.out.println(ret.size());
-			dataset.setValue("Management", new Double((categories[0] / sum )* 100));
-		    dataset.setValue("Food", new Double((categories[1] / sum )* 100));
-		    dataset.setValue("Phone", new Double((categories[2] / sum )* 100));
-		    dataset.setValue("Move", new Double((categories[3] / sum )* 100));
-		    dataset.setValue("Life", new Double((categories[4] / sum )* 100));
-		    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
-		   
+			
 			
 			
 		}
 	}
 	
-	public static void main(String args[])
-	{
-		mainFrame window = new mainFrame();
-		window.setVisible(true);
-//		
-	}
+//	public static void main(String args[])
+//	{
+//		mainFrame window = new mainFrame();
+//		window.setVisible(true);
+////		
+//	}
 }

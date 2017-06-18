@@ -111,25 +111,25 @@ class RecordTable extends ArrayList<Record> implements Categories
 		return max;
 	}
 	
-	public static void main(String args[])
-	{
-		RecordTable RT = new RecordTable();
-		RT.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE");
-		RT.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS");
-		RT.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER");
-		RT.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI");
-	
-		RecordTable list = RT.listByDate(2016, 3, 1, 2017, 6, 11);
-		for(Record it : list)
-		{
-			System.out.println(it.getAmount());
-		}
-		
-		int[] sum = RT.sumByCategories();
-		for(int it : sum)
-		{
-			System.out.println(it);
-		}
-		
-	}
+//	public static void main(String args[])
+//	{
+//		RecordTable RT = new RecordTable();
+//		RT.addRecord(2017, 3, 25, 1000, Categories.FOOD, "APPLE");
+//		RT.addRecord(2017, 3, 26, 2000, Categories.MOVE, "BUS");
+//		RT.addRecord(2017, 2, 13, 1345, Categories.LIFE, "WATER");
+//		RT.addRecord(2017, 6, 11, 1632, Categories.FOOD, "SUSHI");
+//	
+//		RecordTable list = RT.listByDate(2016, 3, 1, 2017, 6, 11);
+//		for(Record it : list)
+//		{
+//			System.out.println(it.getAmount());
+//		}
+//		
+//		int[] sum = RT.sumByCategories();
+//		for(int it : sum)
+//		{
+//			System.out.println(it);
+//		}
+//		
+//	}
 }

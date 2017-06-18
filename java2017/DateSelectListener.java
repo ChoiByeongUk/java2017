@@ -44,18 +44,12 @@ public class DateSelectListener implements ItemListener{
 			for(int i =0; i<categories.length; i++)
 				sum += categories[i];
 				
-				
-			
-			System.out.println(ret.size());
 			dataset.setValue("Management", new Double((categories[0] / sum )* 100));
 		    dataset.setValue("Food", new Double((categories[1] / sum )* 100));
 		    dataset.setValue("Phone", new Double((categories[2] / sum )* 100));
 		    dataset.setValue("Move", new Double((categories[3] / sum )* 100));
 		    dataset.setValue("Life", new Double((categories[4] / sum )* 100));
 		    dataset.setValue("etc.", new Double((categories[5] / sum )* 100));
-		
-			
-			System.out.println(event.getItem());
 		}
 		
 	}

@@ -44,7 +44,6 @@ public class ConfirmFrame extends JFrame implements ActionListener{
 			data.removeItemAt(data.getSelectedIndex());
 			JFrame window = new JFrame("OK.");
 			window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			JButton ok = new JButton("Deleted Succesfully");
 			window.add(new JLabel("Deleted Succesfully. Hit the X button to close."));
 			window.setSize(600, 100);
 			window.setVisible(true);
