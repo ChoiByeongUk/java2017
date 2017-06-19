@@ -4,6 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JMenuBar;
 
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
@@ -38,7 +41,7 @@ public class mainFrame extends JFrame implements ActionListener{
 	
 	
 //	String[] categories = {"Management", "Food", "Phone", "Move", "Life", "etc."};
-	String[] categories = {"°ü¸®ºñ", "½Äºñ", "Åë½Åºñ", "±³Åëºñ", "»ýÈ°¿ëÇ°", "±âÅ¸"};
+	String[] categories = {"ê´€ë¦¬ë¹„", "ì‹ë¹„", "í†µì‹ ë¹„", "êµí†µë¹„", "ìƒí™œìš©í’ˆ", "ê¸°íƒ€"};
 	JComboBox set_Date = new JComboBox(); 
 	public mainFrame()
 	{
@@ -47,6 +50,20 @@ public class mainFrame extends JFrame implements ActionListener{
 		setSize(MAIN_WIDTH, MAIN_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+		
+		JMenuItem openMenu = new JMenuItem("OPEN"), saveMenu = new JMenuItem("SAVE");
+		JMenu fileMenu = new JMenu("FILE");
+		JMenuBar MB = new JMenuBar();
+		
+		openMenu.addActionListener( (ActionEvent e) -> data = TableFileManager.open());
+		saveMenu.addActionListener( (ActionEvent e) -> TableFileManager.write(data));
+		
+		fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
+		MB.add(fileMenu);
+		
+		setJMenuBar(MB);
+		
 		//Top buttons
 		JPanel Top = new JPanel();		
 		JPanel Top_Button = new JPanel();
@@ -141,7 +158,7 @@ public class mainFrame extends JFrame implements ActionListener{
 			month = Integer.parseInt(token.nextToken());
 			
 			RecordTable ret = data.listByMonth(year, month ,year, month+1);/**/
-			int categories[] = ret.sumByCategories(); // ¼öÁ¤ ÇÊ¿äÇÔ. ³¯Â¥ º° Ä«Å×°í¸® ±¸ºÐ ÇÊ¤¤¿ä.
+			int categories[] = ret.sumByCategories(); // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½. ï¿½ï¿½Â¥ ï¿½ï¿½ Ä«ï¿½×°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¤ï¿½ï¿½ï¿½.
 			double sum = 0;
 			for(int i =0; i<categories.length; i++)
 				sum += categories[i];
